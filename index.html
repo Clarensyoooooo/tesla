@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grand Arrival Bridal Car — Batangas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+    :root {
+      --white: #FAFAF8;
+      --off-white: #F2F0EC;
+      --silver: #C8C5BE;
+      --mid-gray: #8A887F;
+      --dark-gray: #3A3835;
+      --charcoal: #1A1917;
+      --black: #0D0C0B;
+      --gold: #C9A96E;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--white);
+      color: var(--charcoal);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── CUSTOM CURSOR ── */
+    #cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--charcoal);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width .3s, height .3s, background .3s;
+    }
+    #cursor-follower {
+      position: fixed;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--mid-gray);
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform .12s ease, width .3s, height .3s, opacity .3s;
+    }
+    body:has(a:hover) #cursor,
+    body:has(button:hover) #cursor { width: 6px; height: 6px; background: var(--gold); }
+    body:has(a:hover) #cursor-follower,
+    body:has(button:hover) #cursor-follower { width: 56px; height: 56px; opacity: .5; }
+
+    /* ── PRELOADER ── */
+    #preloader {
+      position: fixed; inset: 0;
+      background: var(--white);
+      z-index: 9000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .preloader-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(1.6rem, 5vw, 2.8rem);
+      letter-spacing: .25em;
+      color: var(--charcoal);
+      text-transform: uppercase;
+      overflow: hidden;
+    }
+    .preloader-logo span { display: inline-block; }
+    .preloader-tagline {
+      font-family: 'Jost', sans-serif;
+      font-weight: 200;
+      font-size: .75rem;
+      letter-spacing: .4em;
+      text-transform: uppercase;
+      color: var(--mid-gray);
+      overflow: hidden;
+    }
+    .preloader-tagline span { display: inline-block; }
+    .preloader-line {
+      width: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    #hero h1,
+#hero p,
+#hero .btn {
+  /* This will blend the text color with the background image based on light/dark values */
+  mix-blend-mode: soft-light;
+  
+  /* Alternative options:
+     mix-blend-mode: color;       -> adopts the background hue
+     mix-blend-mode: hard-light;  -> more intense effect
+     mix-blend-mode: luminosity;  -> only affects luminosity, making text light or dark
+     mix-blend-mode: difference;  -> high contrast (can be intense)
+  */
+}
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.75rem 4vw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      mix-blend-mode: difference;
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: 1.1rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      font-size: .72rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+      opacity: .75;
+      transition: opacity .3s;
+    }
+    .nav-links a:hover { opacity: 1; }
+    @media (max-width: 640px) { .nav-links { display: none; } }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      padding: 8vh 6vw 10vh;
+      overflow: hidden;
+    }
+    #hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('hero-tesla-bridal.jpg');
+      background-size: cover;
+      background-position: center 30%;
+      transform-origin: center;
+      will-change: transform;
+    }
+    .hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(13, 12, 11, 0.85) 0%,   /* Dark bottom so the CTA pops */
+    rgba(13, 12, 11, 0.55) 50%,  /* Darker middle for the headline */
+    rgba(13, 12, 11, 0.65) 100%  /* Dark top so the Navigation is legible */
+  );
+  pointer-events: none; /* Ensures the overlay doesn't block clicks */
+}
+    .hero-content { position: relative; z-index: 2; max-width: 820px; }
+    .hero-eyebrow {
+      font-family: 'Jost', sans-serif;
+      font-weight: 200;
+      font-size: .7rem;
+      letter-spacing: .55em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.8rem;
+      overflow: hidden;
+    }
+    .hero-eyebrow span { display: inline-block; }
+    .hero-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2.8rem, 7.5vw, 7rem);
+      line-height: 1.05;
+      color: var(--white);
+      margin-bottom: 2rem;
+    }
+    .hero-headline .line { overflow: hidden; display: block; }
+    .hero-headline .line span { display: inline-block; }
+    .hero-sub {
+      font-family: 'Jost', sans-serif;
+      font-weight: 200;
+      font-size: clamp(.85rem, 1.8vw, 1.05rem);
+      color: rgba(250,250,248,.65);
+      letter-spacing: .08em;
+      max-width: 480px;
+      line-height: 1.75;
+      overflow: hidden;
+    }
+    .hero-sub span { display: inline-block; }
+    .hero-cta-wrap {
+      margin-top: 3rem;
+      display: flex; align-items: center; gap: 2rem;
+      overflow: hidden;
+    }
+    .hero-cta-wrap span { display: inline-flex; align-items: center; gap: 2rem; }
+    .btn-primary {
+      display: inline-block;
+      padding: .85rem 2.4rem;
+      border: 1px solid rgba(201,169,110,.6);
+      color: var(--gold);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      font-size: .72rem;
+      letter-spacing: .35em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background .35s, color .35s, border-color .35s;
+      cursor: none;
+    }
+    .btn-primary:hover {
+      background: var(--gold);
+      color: var(--black);
+      border-color: var(--gold);
+    }
+    .hero-scroll-hint {
+      font-family: 'Jost', sans-serif;
+      font-weight: 200;
+      font-size: .68rem;
+      letter-spacing: .4em;
+      text-transform: uppercase;
+      color: rgba(250,250,248,.4);
+    }
+    .hero-badge {
+      position: absolute;
+      bottom: 8vh; right: 6vw;
+      z-index: 2;
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      border: 1px solid rgba(201,169,110,.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .25rem;
+      backdrop-filter: blur(6px);
+    }
+    .hero-badge-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .hero-badge-label {
+      font-family: 'Jost', sans-serif;
+      font-weight: 200;
+      font-size: .52rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: rgba(250,250,248,.5);
+      text-align: center;
+    }
+
+    /* ── SECTION TYPOGRAPHY ── */
+    .section-eyebrow {
+      font-family: 'Jost', sans-serif;
+      font-weight: 200;
+      font-size: .68rem;
+      letter-spacing: .5em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2rem, 5vw, 4.2rem);
+      line-height: 1.1;
+      color: var(--charcoal);
+    }
+    .section-title em { font-style: italic; color: var(--mid-gray); }
+
+    /* ── INTRO STRIP ── */
+    #intro {
+      padding: 10vh 6vw;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6vw;
+      align-items: center;
+      background: var(--white);
+    }
+    @media (max-width: 768px) { #intro { grid-template-columns: 1fr; } }
+    .intro-text p {
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      font-size: clamp(.9rem, 1.5vw, 1.05rem);
+      line-height: 1.9;
+      color: var(--mid-gray);
+      margin-top: 1.5rem;
+    }
+    .intro-visual {
+      position: relative;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+    }
+    .intro-visual img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: grayscale(20%);
+      transition: filter .6s;
+    }
+    .intro-visual:hover img { filter: grayscale(0); }
+    .intro-visual::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(201,169,110,.2);
+      pointer-events: none;
+    }
+
+    /* ── BENTO ── */
+    #features {
+      padding: 10vh 6vw;
+      background: var(--off-white);
+    }
+    .features-header { margin-bottom: 4rem; }
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: auto;
+      gap: 1.2rem;
+    }
+    .bento-card {
+      position: relative;
+      overflow: hidden;
+      background: var(--white);
+      border: 1px solid rgba(200,197,190,.4);
+    }
+    .bento-card.c1 { grid-column: 1/8; grid-row: 1/3; min-height: 480px; }
+    .bento-card.c2 { grid-column: 8/13; grid-row: 1/2; min-height: 230px; }
+    .bento-card.c3 { grid-column: 8/10; grid-row: 2/3; }
+    .bento-card.c4 { grid-column: 10/13; grid-row: 2/3; }
+    .bento-card.c5 { grid-column: 1/5; grid-row: 3/4; min-height: 220px; }
+    .bento-card.c6 { grid-column: 5/9; grid-row: 3/4; }
+    .bento-card.c7 { grid-column: 9/13; grid-row: 3/4; }
+
+    @media (max-width: 900px) {
+      .bento-grid { grid-template-columns: 1fr 1fr; }
+      .bento-card.c1, .bento-card.c2, .bento-card.c3,
+      .bento-card.c4, .bento-card.c5, .bento-card.c6, .bento-card.c7 {
+        grid-column: auto; grid-row: auto; min-height: 220px;
+      }
+      .bento-card.c1 { grid-column: 1/3; min-height: 320px; }
+    }
+    @media (max-width: 520px) {
+      .bento-grid { grid-template-columns: 1fr; }
+      .bento-card.c1 { grid-column: auto; }
+    }
+
+    .bento-img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .8s cubic-bezier(.23,1,.32,1), filter .6s;
+      filter: grayscale(25%);
+    }
+    .bento-card:hover .bento-img { transform: scale(1.05); filter: grayscale(0); }
+    .bento-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(13,12,11,.65) 0%, transparent 65%);
+    }
+    .bento-content {
+      position: absolute; inset: 0;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      z-index: 2;
+    }
+    .bento-label {
+      font-family: 'Jost', sans-serif;
+      font-weight: 200;
+      font-size: .65rem;
+      letter-spacing: .45em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .5rem;
+    }
+    .bento-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: clamp(1.3rem, 2.5vw, 2rem);
+      color: var(--white);
+      line-height: 1.15;
+    }
+    .bento-desc {
+      font-family: 'Jost', sans-serif;
+      font-weight: 200;
+      font-size: .78rem;
+      color: rgba(250,250,248,.6);
+      margin-top: .5rem;
+      line-height: 1.6;
+    }
+
+    /* Solid bento cards (no image) */
+    .bento-solid {
+      background: var(--charcoal);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+    .bento-solid .bento-stat {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: var(--gold);
+      line-height: 1;
+    }
+    .bento-solid .bento-stat-label {
+      font-family: 'Jost', sans-serif;
+      font-weight: 200;
+      font-size: .65rem;
+      letter-spacing: .4em;
+      text-transform: uppercase;
+      color: var(--silver);
+      margin-top: .5rem;
+    }
+
+    .bento-gold {
+      background: linear-gradient(135deg, #C9A96E 0%, #e8cc99 50%, #C9A96E 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .bento-gold::before {
+      content: '✦';
+      position: absolute;
+      top: 1.5rem; right: 1.5rem;
+      font-size: 1.5rem;
+      color: rgba(255,255,255,.3);
+    }
+    .bento-gold .bento-title { color: var(--black); }
+    .bento-gold .bento-label { color: rgba(13,12,11,.5); }
+
+    /* ── GALLERY ── */
+    #gallery {
+      padding: 10vh 6vw;
+      background: var(--white);
+    }
+    .gallery-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .gallery-tag {
+      font-family: 'Jost', sans-serif;
+      font-weight: 200;
+      font-size: .68rem;
+      letter-spacing: .4em;
+      color: var(--mid-gray);
+      text-transform: uppercase;
+    }
+    .masonry-grid {
+      columns: 4;
+      column-gap: 1.2rem;
+    }
+    @media (max-width: 1024px) { .masonry-grid { columns: 3; } }
+    @media (max-width: 640px)  { .masonry-grid { columns: 2; } }
+
+    .masonry-item {
+      break-inside: avoid;
+      margin-bottom: 1.2rem;
+      overflow: hidden;
+      position: relative;
+      cursor: none;
+    }
+    .masonry-item img {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+      filter: grayscale(30%);
+      transition: transform .8s cubic-bezier(.23,1,.32,1), filter .6s;
+    }
+    .masonry-item:hover img { transform: scale(1.06); filter: grayscale(0); }
+    .masonry-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 60%, rgba(13,12,11,.4) 100%);
+      opacity: 0;
+      transition: opacity .4s;
+    }
+    .masonry-item:hover::after { opacity: 1; }
+
+    /* ── PARALLAX QUOTE ── */
+    #quote-section {
+      position: relative;
+      height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    #quote-bg {
+      position: absolute; inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1525438160292-a4a860951216?w=1800&q=85&fit=crop');
+      background-size: cover;
+      background-position: center 40%;
+      will-change: transform;
+    }
+    .quote-overlay {
+      position: absolute; inset: 0;
+      background: rgba(13,12,11,.6);
+    }
+    .quote-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 6vw;
+      max-width: 900px;
+    }
+    .quote-mark {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 8rem;
+      line-height: .6;
+      color: var(--gold);
+      opacity: .3;
+      display: block;
+      margin-bottom: 1rem;
+    }
+    .quote-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: clamp(1.8rem, 4.5vw, 4rem);
+      color: var(--white);
+      line-height: 1.2;
+    }
+    .quote-text .line { overflow: hidden; display: block; }
+    .quote-text .line span { display: inline-block; }
+    .quote-attr {
+      font-family: 'Jost', sans-serif;
+      font-weight: 200;
+      font-size: .7rem;
+      letter-spacing: .45em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: 2.5rem;
+    }
+
+    /* ── HOW IT WORKS ── */
+    #process {
+      padding: 12vh 6vw;
+      background: var(--charcoal);
+    }
+    .process-header { margin-bottom: 5rem; }
+    .process-header .section-title { color: var(--white); }
+    .process-header .section-title em { color: var(--silver); }
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 3rem;
+    }
+    @media (max-width: 768px) { .process-steps { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px) { .process-steps { grid-template-columns: 1fr; } }
+    .step {
+      position: relative;
+    }
+    .step-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4rem;
+      font-weight: 300;
+      color: rgba(201,169,110,.15);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+    .step-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: .75rem;
+    }
+    .step-desc {
+      font-family: 'Jost', sans-serif;
+      font-weight: 200;
+      font-size: .82rem;
+      color: var(--silver);
+      line-height: 1.75;
+    }
+    .step-line {
+      position: absolute;
+      top: 1.8rem; right: -1.5rem;
+      width: 1px; height: 40px;
+      background: rgba(201,169,110,.2);
+    }
+    @media (max-width: 768px) { .step-line { display: none; } }
+    .step:last-child .step-line { display: none; }
+
+    /* ── TESTIMONIAL ── */
+    #testimonials {
+      padding: 12vh 6vw;
+      background: var(--off-white);
+      overflow: hidden;
+    }
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+    @media (max-width: 900px) { .testimonial-grid { grid-template-columns: 1fr; } }
+    .testimonial-card {
+      background: var(--white);
+      border: 1px solid rgba(200,197,190,.3);
+      padding: 2.5rem;
+      position: relative;
+    }
+    .testimonial-card::before {
+      content: '"';
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 5rem;
+      color: var(--gold);
+      opacity: .2;
+      position: absolute;
+      top: 1rem; left: 1.5rem;
+      line-height: 1;
+    }
+    .testimonial-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-style: italic;
+      color: var(--dark-gray);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    .testimonial-author {
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      font-size: .72rem;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--mid-gray);
+    }
+    .testimonial-stars {
+      color: var(--gold);
+      font-size: .7rem;
+      margin-bottom: .75rem;
+      letter-spacing: .1em;
+    }
+
+    /* ── CTA / FOOTER ── */
+    #footer {
+      background: var(--black);
+      position: relative;
+      overflow: hidden;
+    }
+    .footer-cta {
+      padding: 14vh 6vw;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6vw;
+      align-items: center;
+      border-bottom: 1px solid rgba(200,197,190,.1);
+    }
+    @media (max-width: 768px) { .footer-cta { grid-template-columns: 1fr; } }
+    .footer-cta-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2.2rem, 5vw, 4.5rem);
+      color: var(--white);
+      line-height: 1.1;
+    }
+    .footer-cta-title em { font-style: italic; color: var(--gold); }
+    .footer-contact { display: flex; flex-direction: column; gap: 2rem; }
+    .contact-item {
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+    }
+    .contact-label {
+      font-family: 'Jost', sans-serif;
+      font-weight: 200;
+      font-size: .65rem;
+      letter-spacing: .45em;
+      text-transform: uppercase;
+      color: var(--mid-gray);
+    }
+    .contact-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: var(--white);
+      text-decoration: none;
+      transition: color .3s;
+    }
+    .contact-value:hover { color: var(--gold); }
+    .footer-btn {
+      display: inline-block;
+      padding: 1rem 3rem;
+      background: var(--gold);
+      color: var(--black);
+      font-family: 'Jost', sans-serif;
+      font-weight: 400;
+      font-size: .72rem;
+      letter-spacing: .35em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background .35s, transform .35s;
+      cursor: none;
+      align-self: flex-start;
+    }
+    .footer-btn:hover { background: var(--white); transform: translateY(-2px); }
+    .footer-bottom {
+      padding: 3rem 6vw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: 1rem;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--white);
+      opacity: .4;
+    }
+    .footer-copy {
+      font-family: 'Jost', sans-serif;
+      font-weight: 200;
+      font-size: .65rem;
+      letter-spacing: .2em;
+      color: var(--mid-gray);
+    }
+    .footer-social {
+      display: flex;
+      gap: 2rem;
+    }
+    .footer-social a {
+      font-family: 'Jost', sans-serif;
+      font-weight: 200;
+      font-size: .65rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--mid-gray);
+      text-decoration: none;
+      transition: color .3s;
+    }
+    .footer-social a:hover { color: var(--gold); }
+
+    /* Footer bg ornament */
+    .footer-ornament {
+      position: absolute;
+      bottom: -5rem; right: -5rem;
+      width: 35vw; height: 35vw;
+      border-radius: 50%;
+      border: 1px solid rgba(201,169,110,.05);
+      pointer-events: none;
+    }
+    .footer-ornament-2 {
+      position: absolute;
+      bottom: -8rem; right: -8rem;
+      width: 50vw; height: 50vw;
+      border-radius: 50%;
+      border: 1px solid rgba(201,169,110,.03);
+      pointer-events: none;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 60px; height: 1px;
+      background: var(--gold);
+      margin: 1.5rem 0;
+    }
+
+    /* ── SCROLL PROGRESS ── */
+    #scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), #e8cc99);
+      z-index: 9100;
+      transform-origin: left;
+      transform: scaleX(0);
+    }
+
+    /* Reveal utility */
+    .reveal-hidden { opacity: 0; }
+  </style>
+</head>
+<body>
+
+  <!-- CURSOR -->
+  <div id="cursor"></div>
+  <div id="cursor-follower"></div>
+
+  <!-- SCROLL PROGRESS -->
+  <div id="scroll-progress"></div>
+
+  <!-- PRELOADER -->
+  <div id="preloader">
+    <div class="preloader-logo">
+      <span>Grand Arrival</span>
+    </div>
+    <div class="preloader-line" id="preloader-line"></div>
+    <div class="preloader-tagline">
+      <span>Bridal Car — Batangas</span>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav id="main-nav">
+    <a href="#" class="nav-logo">Grand Arrival</a>
+    <ul class="nav-links">
+      <li><a href="#features">Our Fleet</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#process">How It Works</a></li>
+      <li><a href="#footer">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div id="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow"><span>Tesla Bridal Car Service — Batangas</span></div>
+      <h1 class="hero-headline">
+        <span class="line"><span>Arrive in style,</span></span>
+        <span class="line"><span>love &amp; memories.</span></span>
+      </h1>
+      <p class="hero-sub"><span>Elegant Tesla Bridal Car service for your once-a-lifetime "I do."</span></p>
+      <div class="hero-cta-wrap">
+        <span>
+          <a href="#footer" class="btn-primary">Reserve Your Date</a>
+          <span class="hero-scroll-hint">Scroll to explore</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section id="intro">
+    <div class="intro-text">
+      <p class="section-eyebrow">Our Story</p>
+      <h2 class="section-title">More than a ride,<br><em>it's an experience.</em></h2>
+      <div class="divider"></div>
+      <p>At Grand Arrival, we believe the journey to your forever begins the moment you step into our Tesla Model 3. Sleek, silent, and effortlessly sophisticated — it is the perfect prelude to the most important day of your life.</p>
+      <p style="margin-top:1rem">Based in Batangas, we serve couples across the province and nearby regions who demand nothing but the extraordinary on their wedding day.</p>
+    </div>
+    <div class="intro-visual">
+      <img src="more.jpg" alt="Tesla Model 3 exterior" loading="lazy" />
+    </div>
+  </section>
+
+  <!-- FEATURES / BENTO -->
+  <section id="features">
+    <div class="features-header">
+      <p class="section-eyebrow">Why Grand Arrival</p>
+      <h2 class="section-title">Premium in every<br><em>detail.</em></h2>
+    </div>
+
+    <div class="bento-grid">
+      <!-- C1 — Large hero card -->
+      <div class="bento-card c1">
+        <img class="bento-img" src="tesla-exterior.jpg" alt="Tesla Model 3" loading="lazy" />
+        <div class="bento-overlay"></div>
+        <div class="bento-content">
+          <span class="bento-label">Our Vehicle</span>
+          <h3 class="bento-title">Tesla Model 3<br>— Pristine White</h3>
+          <p class="bento-desc">All-electric luxury sedan. Zero emissions, zero noise, 100% elegance.</p>
+        </div>
+      </div>
+
+      <!-- C2 — Starting price -->
+      <div class="bento-card c2 bento-gold">
+        <span class="bento-label">Packages Start At</span>
+        <h3 class="bento-title" style="font-size:clamp(1.6rem,3vw,2.5rem);">₱6,999<br><span style="font-size:.6em;opacity:.6">only</span></h3>
+        <p style="font-family:'Jost',sans-serif;font-weight:200;font-size:.78rem;color:rgba(13,12,11,.55);margin-top:.4rem;">Inclusive of ribbons &amp; décor</p>
+      </div>
+
+      <!-- C3 — Stat -->
+      <div class="bento-card c3 bento-solid">
+        <span class="bento-stat">5★</span>
+        <span class="bento-stat-label">Rated Service</span>
+      </div>
+
+      <!-- C4 — Image card -->
+      <div class="bento-card c4">
+        <img class="bento-img" src="floralhood.jpg" alt="Wedding detail" loading="lazy" />
+        <div class="bento-overlay"></div>
+        <div class="bento-content">
+          <span class="bento-label">Special Touch</span>
+          <h3 class="bento-title" style="font-size:1rem;">Custom Floral Décor</h3>
+        </div>
+      </div>
+
+      <!-- C5 — Image -->
+      <div class="bento-card c5">
+        <img class="bento-img" src="bride8.jpg" alt="Tesla interior" loading="lazy" />
+        <div class="bento-overlay"></div>
+        <div class="bento-content">
+          <span class="bento-label">Interior</span>
+          <h3 class="bento-title">Plush &amp;<br>Immaculate</h3>
+        </div>
+      </div>
+
+      <!-- C6 — Solid dark -->
+      <div class="bento-card c6 bento-solid" style="align-items:flex-start;justify-content:flex-start;padding:2rem;">
+        <span class="bento-label" style="color:var(--gold);">Coverage</span>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:1.4rem;color:var(--white);margin-top:.75rem;line-height:1.4;">Batangas City &amp; Surrounding Municipalities</h3>
+        <p style="font-family:'Jost',sans-serif;font-weight:200;font-size:.78rem;color:var(--silver);margin-top:.75rem;line-height:1.6;">We coordinate with your venue team for seamless, on-time arrivals.</p>
+      </div>
+
+      <!-- C7 — Image -->
+      <div class="bento-card c7">
+        <img class="bento-img" src="captured.jpg" alt="Wedding ceremony" loading="lazy" />
+        <div class="bento-overlay"></div>
+        <div class="bento-content">
+          <span class="bento-label">Moments</span>
+          <h3 class="bento-title">Captured<br>Forever</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery">
+    <div class="gallery-header">
+      <div>
+        <p class="section-eyebrow">Client Gallery</p>
+        <h2 class="section-title">Real couples,<br><em>real moments.</em></h2>
+      </div>
+      <span class="gallery-tag">Swipe to explore →</span>
+    </div>
+
+    <div class="masonry-grid">
+      <div class="masonry-item">
+        <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&q=80&fit=crop" alt="Wedding couple" loading="lazy" />
+      </div>
+      <div class="masonry-item">
+        <img src="https://images.unsplash.com/photo-1543877087-ebf2fb7f4537?w=600&q=80&fit=crop" alt="Tesla wedding car" loading="lazy" />
+      </div>
+      <div class="masonry-item" style="margin-top:2.5rem">
+        <img src="https://images.unsplash.com/photo-1509927083803-4bd519298ac4?w=600&q=80&fit=crop" alt="Wedding decoration" loading="lazy" />
+      </div>
+      <div class="masonry-item">
+        <img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=600&q=80&fit=crop" alt="Bride portrait" loading="lazy" />
+      </div>
+      <div class="masonry-item" style="margin-top:1.8rem">
+        <img src="https://images.unsplash.com/photo-1530023367847-a683933f4172?w=600&q=80&fit=crop" alt="Wedding flowers" loading="lazy" />
+      </div>
+      <div class="masonry-item">
+        <img src="https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?w=600&q=80&fit=crop" alt="Couple joy" loading="lazy" />
+      </div>
+      <div class="masonry-item" style="margin-top:3rem">
+        <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600&q=80&fit=crop" alt="Wedding rings" loading="lazy" />
+      </div>
+      <div class="masonry-item">
+        <img src="https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=600&q=80&fit=crop" alt="Ceremony aisle" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <!-- PARALLAX QUOTE -->
+  <section id="quote-section">
+    <div id="quote-bg"></div>
+    <div class="quote-overlay"></div>
+    <div class="quote-content">
+      <span class="quote-mark">"</span>
+      <blockquote class="quote-text">
+        <span class="line"><span>Because your love story</span></span>
+        <span class="line"><span>deserves a grand entrance.</span></span>
+      </blockquote>
+      <p class="quote-attr">— Grand Arrival Bridal Car, Batangas</p>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="process">
+    <div class="process-header">
+      <p class="section-eyebrow" style="color:var(--gold)">The Experience</p>
+      <h2 class="section-title">How it <em>works.</em></h2>
+    </div>
+    <div class="process-steps">
+      <div class="step">
+        <div class="step-number">01</div>
+        <h3 class="step-title">Reach Out</h3>
+        <p class="step-desc">Message us on Facebook or send us a text. We'll get back to you within the hour.</p>
+        <div class="step-line"></div>
+      </div>
+      <div class="step">
+        <div class="step-number">02</div>
+        <h3 class="step-title">Choose Package</h3>
+        <p class="step-desc">Select from our tailored packages. All include ribbons, décor, and a professional chauffeur.</p>
+        <div class="step-line"></div>
+      </div>
+      <div class="step">
+        <div class="step-number">03</div>
+        <h3 class="step-title">Reserve Date</h3>
+        <p class="step-desc">Lock in your date with a minimal reservation fee. Your slot is exclusively yours.</p>
+        <div class="step-line"></div>
+      </div>
+      <div class="step">
+        <div class="step-number">04</div>
+        <h3 class="step-title">Grand Arrival</h3>
+        <p class="step-desc">We arrive early, impeccably prepared. You step in, and your forever begins.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials">
+    <p class="section-eyebrow">Testimonials</p>
+    <h2 class="section-title">Words from<br><em>our couples.</em></h2>
+    <div class="testimonial-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"The Tesla was immaculate — inside and out. Our guests couldn't stop taking photos. Grand Arrival made our entrance absolutely unforgettable."</p>
+        <span class="testimonial-author">— Camille &amp; James, Lipa City</span>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Booking was so easy, and the car looked straight out of a magazine. The ribbons and décor were elegant. 100% worth every peso!"</p>
+        <span class="testimonial-author">— Andrea &amp; Marco, Batangas City</span>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Professional, on time, and the car is stunning. When I stepped out in my gown with that Tesla behind me — it was everything I dreamed of."</p>
+        <span class="testimonial-author">— Sophia &amp; Nico, Tanauan</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER / CTA -->
+  <footer id="footer">
+    <div class="footer-ornament"></div>
+    <div class="footer-ornament-2"></div>
+    <div class="footer-cta">
+      <div>
+        <p class="section-eyebrow" style="color:var(--gold)">Reserve Your Date</p>
+        <h2 class="footer-cta-title">Your grand<br>arrival <em>awaits.</em></h2>
+        <p style="font-family:'Jost',sans-serif;font-weight:200;font-size:.85rem;color:var(--mid-gray);margin-top:1.5rem;line-height:1.8;max-width:380px;">Message us now to secure your wedding date. Limited slots available — don't let someone else claim your day.</p>
+      </div>
+      <div class="footer-contact">
+        <div class="contact-item">
+          <span class="contact-label">Call or Text</span>
+          <a href="tel:+639989676468" class="contact-value">0998 967 6468</a>
+        </div>
+        <div class="contact-item">
+          <span class="contact-label">Facebook</span>
+          <a href="https://facebook.com/grandarrivalbatangas" target="_blank" class="contact-value">@grandarrivalbatangas</a>
+        </div>
+        <div class="contact-item">
+          <span class="contact-label">Location</span>
+          <span class="contact-value" style="font-size:1.1rem;">Batangas, Philippines</span>
+        </div>
+        <a href="https://m.me/grandarrivalbatangas" target="_blank" class="footer-btn">Message Us Now</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-brand">Grand Arrival Bridal Car</span>
+      <span class="footer-copy">© 2025 Grand Arrival. All rights reserved. Batangas, PH.</span>
+      <div class="footer-social">
+        <a href="https://facebook.com/grandarrivalbatangas" target="_blank">Facebook</a>
+        <a href="tel:+639989676468">Call Us</a>
+      </div>
+    </div>
+  </footer>
+
+<script>
+(function () {
+  /* ── CURSOR ── */
+  const cursor = document.getElementById('cursor');
+  const follower = document.getElementById('cursor-follower');
+  let mx = 0, my = 0, fx = 0, fy = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  (function animateCursor() {
+    cursor.style.left = mx + 'px';
+    cursor.style.top  = my + 'px';
+    fx += (mx - fx) * .12;
+    fy += (my - fy) * .12;
+    follower.style.left = fx + 'px';
+    follower.style.top  = fy + 'px';
+    requestAnimationFrame(animateCursor);
+  })();
+
+  /* ── GSAP SETUP ── */
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* ── SCROLL PROGRESS ── */
+  gsap.to('#scroll-progress', {
+    scaleX: 1,
+    ease: 'none',
+    scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: true }
+  });
+
+  /* ── PRELOADER ── */
+  const tl = gsap.timeline({
+    onComplete: () => {
+      gsap.to('#preloader', {
+        opacity: 0,
+        duration: .9,
+        ease: 'power2.inOut',
+        onComplete: () => { document.getElementById('preloader').style.display = 'none'; }
+      });
+      revealHero();
+    }
+  });
+
+  tl.set('.preloader-logo span, .preloader-tagline span', { y: 60, opacity: 0 })
+    .to('.preloader-logo span',    { y: 0, opacity: 1, duration: 1.1, ease: 'power4.out' })
+    .to('#preloader-line',         { width: 200, duration: .8, ease: 'power3.inOut' }, '-=.3')
+    .to('.preloader-tagline span', { y: 0, opacity: 1, duration: .9, ease: 'power3.out' }, '-=.4')
+    .to({}, { duration: 1.2 }); // hold
+
+  /* ── HERO REVEAL ── */
+  function revealHero() {
+    const htl = gsap.timeline();
+    htl.from('#hero-bg',          { scale: 1.12, duration: 2.2, ease: 'power4.out' })
+       .from('.hero-eyebrow span', { y: 30, opacity: 0, duration: 1, ease: 'power4.out' }, '-=1.8')
+       .from('.hero-headline .line span', {
+          y: 80, opacity: 0, duration: 1.1, ease: 'power4.out', stagger: .18
+        }, '-=.8')
+       .from('.hero-sub span',    { y: 30, opacity: 0, duration: .9, ease: 'power3.out' }, '-=.5')
+       .from('.hero-cta-wrap span', { y: 20, opacity: 0, duration: .8, ease: 'power3.out' }, '-=.5')
+       .from('.hero-badge',        { scale: 0, opacity: 0, duration: .6, ease: 'back.out(1.5)' }, '-=.3')
+       .from('#main-nav',          { y: -30, opacity: 0, duration: .8, ease: 'power3.out' }, '<');
+  }
+
+  /* ── HERO PARALLAX ── */
+  gsap.to('#hero-bg', {
+    yPercent: 35,
+    ease: 'none',
+    scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true }
+  });
+
+  /* ── INTRO ── */
+  gsap.from('#intro .intro-text > *', {
+    y: 40, opacity: 0, duration: 1, ease: 'power4.out', stagger: .15,
+    scrollTrigger: { trigger: '#intro', start: 'top 78%' }
+  });
+  gsap.from('#intro .intro-visual', {
+    x: 60, opacity: 0, duration: 1.2, ease: 'power4.out',
+    scrollTrigger: { trigger: '#intro', start: 'top 75%' }
+  });
+
+  /* ── BENTO GRID ── */
+  gsap.from('.bento-card', {
+    scale: .92, opacity: 0, duration: .9, ease: 'power4.out',
+    stagger: { amount: .6, from: 'start' },
+    scrollTrigger: { trigger: '.bento-grid', start: 'top 80%' }
+  });
+
+  /* ── GALLERY MASONRY ── */
+  gsap.from('.masonry-item', {
+    y: 70, opacity: 0, rotation: 3, duration: 1, ease: 'power4.out',
+    stagger: { amount: .9, from: 'random' },
+    scrollTrigger: { trigger: '.masonry-grid', start: 'top 80%' }
+  });
+
+  /* ── PARALLAX QUOTE BG ── */
+  gsap.to('#quote-bg', {
+    yPercent: 25,
+    ease: 'none',
+    scrollTrigger: { trigger: '#quote-section', start: 'top bottom', end: 'bottom top', scrub: true }
+  });
+
+  /* ── QUOTE TEXT ── */
+  gsap.from('#quote-section .quote-mark', {
+    scale: .5, opacity: 0, duration: 1, ease: 'power4.out',
+    scrollTrigger: { trigger: '#quote-section', start: 'top 70%' }
+  });
+  gsap.from('.quote-text .line span', {
+    y: 60, opacity: 0, duration: 1.1, ease: 'power4.out', stagger: .2,
+    scrollTrigger: { trigger: '#quote-section', start: 'top 68%' }
+  });
+  gsap.from('.quote-attr', {
+    y: 20, opacity: 0, duration: .8, ease: 'power3.out',
+    scrollTrigger: { trigger: '#quote-section', start: 'top 60%' }
+  });
+
+  /* ── PROCESS STEPS ── */
+  gsap.from('.step', {
+    y: 50, opacity: 0, duration: .9, ease: 'power4.out', stagger: .15,
+    scrollTrigger: { trigger: '.process-steps', start: 'top 80%' }
+  });
+
+  /* ── TESTIMONIALS ── */
+  gsap.from('.testimonial-card', {
+    y: 50, opacity: 0, duration: .9, ease: 'power4.out', stagger: .18,
+    scrollTrigger: { trigger: '.testimonial-grid', start: 'top 80%' }
+  });
+
+  /* ── FOOTER CTA ── */
+  gsap.from('.footer-cta > *', {
+    y: 50, opacity: 0, duration: 1, ease: 'power4.out', stagger: .2,
+    scrollTrigger: { trigger: '.footer-cta', start: 'top 80%' }
+  });
+
+  /* ── SECTION EYEBROWS / TITLES (global) ── */
+  gsap.utils.toArray('.section-eyebrow, .section-title, .divider').forEach(el => {
+    gsap.from(el, {
+      y: 30, opacity: 0, duration: .9, ease: 'power4.out',
+      scrollTrigger: { trigger: el, start: 'top 88%' }
+    });
+  });
+
+})();
+</script>
+</body>
+</html>
