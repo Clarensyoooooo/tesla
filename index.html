@@ -2,12 +2,6 @@
 <html lang="en">
 <head>
 
-  <script type="text/javascript">
-    (function(){
-      emailjs.init({ publicKey: "RmdyvrbcjDFzEZ1FP" }); // Paste Public Key
-    })();
-  </script>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Grand Arrival Bridal Car — Batangas</title>
@@ -20,12 +14,11 @@
 
   
 
-  <!-- EmailJS SDK -->
+ <!-- EmailJS SDK -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script type="text/javascript">
     (function(){
-      // Replace this with your actual EmailJS Public Key later
-      emailjs.init({ publicKey: "YOUR_PUBLIC_KEY" });
+      emailjs.init({ publicKey: "RmdyvrbcjDFzEZ1FP" }); 
     })();
   </script>
 
@@ -1300,7 +1293,7 @@
           <span class="contact-label">Location</span>
           <span class="contact-value" style="font-size:1.1rem;">Batangas, Philippines</span>
         </div>
-        <a href="https://m.me/grandarrivalbatangas" target="_blank" class="footer-btn">Message Us Now</a>
+        <a href="#" class="footer-btn trigger-booking-modal">Message Us Now</a>
       </div>
     </div>
     <div class="footer-bottom">
@@ -1532,7 +1525,7 @@
       submitBtn.style.pointerEvents = 'none';
 
       // Replace these with your actual IDs
-      emailjs.sendForm('service_jeyi00u', 'service_jeyi00u', this)
+      emailjs.sendForm('service_fyy2oc5', 'template_7bqa5xi', '#booking-form')
           .then(() => {
               statusDiv.textContent = 'Message sent successfully! We will contact you soon.';
               statusDiv.style.color = '#3A3835';
