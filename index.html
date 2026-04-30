@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+  <script type="text/javascript">
+    (function(){
+      emailjs.init({ publicKey: "RmdyvrbcjDFzEZ1FP" }); // Paste Public Key
+    })();
+  </script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Grand Arrival Bridal Car — Batangas</title>
@@ -10,6 +17,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  
+
+  <!-- EmailJS SDK -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function(){
+      // Replace this with your actual EmailJS Public Key later
+      emailjs.init({ publicKey: "YOUR_PUBLIC_KEY" });
+    })();
+  </script>
 
   <style>
     :root {
@@ -889,6 +907,63 @@
       margin: 1.5rem 0;
     }
 
+    /* ── BOOKING MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(13,12,11,0.85);
+      z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.4s ease;
+      backdrop-filter: blur(5px);
+      padding: 5vw;
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    
+    .modal-content {
+      background: var(--white);
+      width: 100%; max-width: 500px;
+      padding: 3rem 2.5rem;
+      position: relative;
+      border: 1px solid rgba(201,169,110,0.4);
+      transform: translateY(20px);
+      transition: transform 0.4s ease;
+    }
+    .modal-overlay.active .modal-content { transform: translateY(0); }
+    
+    .close-modal-btn {
+      position: absolute; top: 1.5rem; right: 1.5rem;
+      background: none; border: none;
+      font-size: 2rem; color: var(--mid-gray);
+      cursor: pointer; line-height: 1;
+      transition: color 0.3s;
+    }
+    .close-modal-btn:hover { color: var(--gold); }
+    
+    .modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem; font-weight: 300;
+      color: var(--charcoal); line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+    
+    #booking-form { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem;}
+    
+    #booking-form input, #booking-form textarea {
+      width: 100%; padding: 0.8rem 1rem;
+      border: 1px solid var(--silver); background: transparent;
+      font-family: 'Jost', sans-serif; font-size: 0.85rem; font-weight: 300;
+      color: var(--charcoal); outline: none;
+      transition: border-color 0.3s;
+    }
+    #booking-form input:focus, #booking-form textarea:focus { border-color: var(--gold); }
+    
+    .form-status {
+      margin-top: 1rem; font-family: 'Jost', sans-serif;
+      font-size: 0.8rem; text-align: center; font-weight: 300;
+      display: none;
+    }
+
     /* ── SCROLL PROGRESS ── */
     #scroll-progress {
       position: fixed;
@@ -899,6 +974,7 @@
       transform-origin: left;
       transform: scaleX(0);
     }
+    
 
     /* Reveal utility */
     .reveal-hidden { opacity: 0; }
@@ -1126,7 +1202,7 @@
         <div class="pricing-price-col">
           <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(3.5rem,7vw,5.5rem);font-weight:300;color:var(--black);line-height:1;">₱6,999</div>
           <div style="font-family:'Jost',sans-serif;font-weight:200;font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:rgba(13,12,11,.45);margin-top:.5rem;">only</div>
-          <a href="https://m.me/grandarrivalbatangas" target="_blank" style="display:inline-block;margin-top:2rem;padding:.8rem 2rem;background:var(--black);color:var(--white);font-family:'Jost',sans-serif;font-weight:300;font-size:.68rem;letter-spacing:.35em;text-transform:uppercase;text-decoration:none;transition:background .3s;">Reserve Now</a>
+          <a href="#" class="trigger-booking-modal" style="display:inline-block;margin-top:2rem;padding:.8rem 2rem;background:var(--black);color:var(--white);font-family:'Jost',sans-serif;font-weight:300;font-size:.68rem;letter-spacing:.35em;text-transform:uppercase;text-decoration:none;transition:background .3s;">Reserve Now</a>
         </div>
       </div>
       <p style="font-family:'Jost',sans-serif;font-weight:200;font-size:.72rem;color:var(--mid-gray);letter-spacing:.2em;text-align:center;">Limited slots per month · Message us to check your date</p>
@@ -1205,7 +1281,7 @@
       <div>
         <p class="section-eyebrow" style="color:var(--gold)">Reserve Your Date</p>
         <h2 class="footer-cta-title">Your grand<br>arrival <em>awaits.</em></h2>
-        <p style="font-family:'Jost',sans-serif;font-weight:200;font-size:.85rem;color:var(--mid-gray);margin-top:1.5rem;line-height:1.8;max-width:380px;">Message us now to secure your wedding date. Limited slots available — don't let someone else claim your day.</p>
+        <a href="#" class="footer-btn trigger-booking-modal">Message Us Now</a>
       </div>
       <div class="footer-contact">
         <div class="contact-item">
@@ -1214,11 +1290,11 @@
         </div>
         <div class="contact-item">
           <span class="contact-label">Facebook</span>
-          <a href="https://facebook.com/grandarrivalbatangas" target="_blank" class="contact-value">@grandarrivalbatangas</a>
+          <a href="https://www.facebook.com/profile.php?id=61585877081656" target="_blank" class="contact-value">@grandarrivalbatangas</a>
         </div>
         <div class="contact-item">
           <span class="contact-label">Instagram</span>
-          <a href="https://instagram.com/grandarrivalbatangas" target="_blank" class="contact-value">@grandarrivalbatangas</a>
+          <a href="https://www.instagram.com/grandarrivalbridalcar_batangas/" target="_blank" class="contact-value">@grandarrivalbatangas</a>
         </div>
         <div class="contact-item">
           <span class="contact-label">Location</span>
@@ -1234,11 +1310,11 @@
         <span style="font-family:'Jost',sans-serif;font-weight:200;font-size:.6rem;letter-spacing:.2em;color:var(--mid-gray);opacity:.6;">Want a custom wedding website? Visit our partner <a href="https://kneel.studios" target="_blank" style="color:var(--gold);text-decoration:none;opacity:1;transition:opacity .3s;" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'">kneel.studios</a></span>
       </div>
       <div class="footer-social">
-        <a href="https://facebook.com/grandarrivalbatangas" target="_blank" aria-label="Facebook" style="display:flex;align-items:center;gap:.5rem;">
+        <a href="https://www.facebook.com/profile.php?id=61585877081656" target="_blank" aria-label="Facebook" style="display:flex;align-items:center;gap:.5rem;">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="opacity:.6;flex-shrink:0;"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
           Facebook
         </a>
-        <a href="https://instagram.com/grandarrivalbatangas" target="_blank" aria-label="Instagram" style="display:flex;align-items:center;gap:.5rem;">
+        <a href="https://www.instagram.com/grandarrivalbridalcar_batangas/" target="_blank" aria-label="Instagram" style="display:flex;align-items:center;gap:.5rem;">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="opacity:.6;flex-shrink:0;"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
           Instagram
         </a>
@@ -1249,6 +1325,27 @@
       </div>
     </div>
   </footer>
+
+  <!-- BOOKING MODAL -->
+  <div id="booking-modal" class="modal-overlay">
+    <div class="modal-content">
+      <button id="close-modal" class="close-modal-btn">&times;</button>
+      <h2 class="modal-title">Reserve Your Date</h2>
+      <p style="font-family:'Jost',sans-serif; font-weight:200; font-size:0.85rem; color:var(--mid-gray);">Fill out the details below to check availability.</p>
+      
+      <form id="booking-form">
+        <!-- The name attributes must match your EmailJS template variables -->
+        <input type="text" name="user_name" placeholder="Your Name" required>
+        <input type="email" name="user_email" placeholder="Email Address" required>
+        <input type="tel" name="user_phone" placeholder="Phone Number" required>
+        <input type="date" name="wedding_date" required style="color: var(--mid-gray);">
+        <textarea name="message" placeholder="Venue Locations / Specific Requests" rows="4"></textarea>
+        
+        <button type="submit" class="btn-primary" style="width:100%; text-align:center; margin-top:0.5rem; cursor:pointer; background:var(--gold); color:var(--black);">Send Inquiry</button>
+      </form>
+      <div id="form-status" class="form-status"></div>
+    </div>
+  </div>
 
 <script>
 (function () {
@@ -1391,6 +1488,65 @@
       y: 30, opacity: 0, duration: .9, ease: 'power4.out',
       scrollTrigger: { trigger: el, start: 'top 88%' }
     });
+  });
+
+  /* ── MODAL & EMAILJS LOGIC ── */
+  const modal = document.getElementById('booking-modal');
+  const closeBtn = document.getElementById('close-modal');
+  const triggerBtns = document.querySelectorAll('.trigger-booking-modal');
+  const form = document.getElementById('booking-form');
+  const statusDiv = document.getElementById('form-status');
+
+  // Open modal
+  triggerBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault(); // Stops the link from jumping
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden'; // Prevents background scrolling
+    });
+  });
+
+  // Close modal function
+  const closeModal = () => {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+    setTimeout(() => {
+      form.reset();
+      statusDiv.style.display = 'none';
+      form.querySelector('button[type="submit"]').textContent = 'Send Inquiry';
+    }, 400); // Wait for fade out
+  };
+
+  // Close triggers
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal(); // Click outside to close
+  });
+
+  // Handle Form Submit
+  form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      const submitBtn = form.querySelector('button[type="submit"]');
+      submitBtn.textContent = 'Sending...';
+      submitBtn.style.pointerEvents = 'none';
+
+      // Replace these with your actual IDs
+      emailjs.sendForm('service_jeyi00u', 'service_jeyi00u', this)
+          .then(() => {
+              statusDiv.textContent = 'Message sent successfully! We will contact you soon.';
+              statusDiv.style.color = '#3A3835';
+              statusDiv.style.display = 'block';
+              submitBtn.textContent = 'Sent ✓';
+              setTimeout(closeModal, 3000);
+          }, (error) => {
+              statusDiv.textContent = 'Failed to send. Please try again or message our Facebook page.';
+              statusDiv.style.color = 'red';
+              statusDiv.style.display = 'block';
+              submitBtn.textContent = 'Send Inquiry';
+              submitBtn.style.pointerEvents = 'auto';
+              console.log('FAILED...', error);
+          });
   });
 
 })();
