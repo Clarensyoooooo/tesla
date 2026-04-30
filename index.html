@@ -32,34 +32,7 @@
       background: var(--white);
       color: var(--charcoal);
       overflow-x: hidden;
-      cursor: none;
     }
-
-    /* ── CUSTOM CURSOR ── */
-    #cursor {
-      position: fixed;
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: var(--charcoal);
-      pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: width .3s, height .3s, background .3s;
-    }
-    #cursor-follower {
-      position: fixed;
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      border: 1px solid var(--mid-gray);
-      pointer-events: none;
-      z-index: 9998;
-      transform: translate(-50%, -50%);
-      transition: transform .12s ease, width .3s, height .3s, opacity .3s;
-    }
-    body:has(a:hover) #cursor,
-    body:has(button:hover) #cursor { width: 6px; height: 6px; background: var(--gold); }
-    body:has(a:hover) #cursor-follower,
-    body:has(button:hover) #cursor-follower { width: 56px; height: 56px; opacity: .5; }
 
     /* ── PRELOADER ── */
     #preloader {
@@ -146,6 +119,63 @@
     .nav-links a:hover { opacity: 1; }
     @media (max-width: 640px) { .nav-links { display: none; } }
 
+    /* ── BURGER ── */
+    #burger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px; height: 36px;
+      background: none;
+      border: none;
+      padding: 4px;
+      z-index: 200;
+      position: relative;
+    }
+    #burger span {
+      display: block;
+      height: 1px;
+      background: var(--white);
+      transition: transform .35s ease, opacity .35s ease, width .35s ease;
+      transform-origin: center;
+    }
+    #burger span:nth-child(1) { width: 24px; }
+    #burger span:nth-child(2) { width: 16px; }
+    #burger span:nth-child(3) { width: 24px; }
+    #burger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); width: 24px; }
+    #burger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    #burger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); width: 24px; }
+    @media (max-width: 640px) { #burger { display: flex; } }
+
+    /* Mobile drawer */
+    #mobile-menu {
+      position: fixed;
+      inset: 0;
+      background: var(--black);
+      z-index: 150;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .4s ease;
+    }
+    #mobile-menu.open { opacity: 1; pointer-events: all; }
+    #mobile-menu a {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2rem, 8vw, 3rem);
+      letter-spacing: .1em;
+      color: var(--white);
+      text-decoration: none;
+      opacity: .7;
+      transition: opacity .3s, color .3s;
+    }
+    #mobile-menu a:hover { opacity: 1; color: var(--gold); }
+    .mobile-menu-divider { width: 40px; height: 1px; background: rgba(201,169,110,.3); }
+
     /* ── HERO ── */
     #hero {
       position: relative;
@@ -224,7 +254,6 @@
       text-transform: uppercase;
       text-decoration: none;
       transition: background .35s, color .35s, border-color .35s;
-      cursor: none;
     }
     .btn-primary:hover {
       background: var(--gold);
@@ -491,7 +520,6 @@
       margin-bottom: 1.2rem;
       overflow: hidden;
       position: relative;
-      cursor: none;
     }
     .masonry-item img {
       width: 100%;
@@ -522,7 +550,7 @@
     }
     #quote-bg {
       position: absolute; inset: 0;
-      background-image: url('https://images.unsplash.com/photo-1525438160292-a4a860951216?w=1800&q=85&fit=crop');
+      background-image: url('quote.jpg');
       background-size: cover;
       background-position: center 40%;
       will-change: transform;
@@ -542,8 +570,8 @@
       font-family: 'Cormorant Garamond', serif;
       font-size: 8rem;
       line-height: .6;
-      color: var(--gold);
-      opacity: .3;
+      color: var(--white); /* Changed from var(--gold) */
+      opacity: .5;         /* Bumped up from .3 so it stands out */
       display: block;
       margin-bottom: 1rem;
     }
@@ -563,7 +591,7 @@
       font-size: .7rem;
       letter-spacing: .45em;
       text-transform: uppercase;
-      color: var(--gold);
+      color: var(--white); /* Changed from var(--gold) */
       margin-top: 2.5rem;
     }
 
@@ -616,26 +644,91 @@
     @media (max-width: 768px) { .step-line { display: none; } }
     .step:last-child .step-line { display: none; }
 
+    /* ── PRICING CARD ── */
+    .pricing-card {
+      background: var(--gold);
+      padding: 4rem 5rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 4rem;
+      align-items: center;
+      max-width: 860px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .pricing-price-col {
+      text-align: center;
+      border-left: 1px solid rgba(13,12,11,.12);
+      padding-left: 4rem;
+    }
+
+    @media (max-width: 768px) {
+      .pricing-card {
+        grid-template-columns: 1fr; /* Stacks the columns */
+        padding: 3rem 2rem; /* Reduces the huge padding */
+        gap: 2.5rem;
+      }
+      .pricing-price-col {
+        border-left: none; /* Removes side border */
+        padding-left: 0;
+        border-top: 1px solid rgba(13,12,11,.12); /* Adds top border as divider */
+        padding-top: 2.5rem;
+      }
+    }
+
     /* ── TESTIMONIAL ── */
     #testimonials {
-      padding: 12vh 6vw;
+      padding: 12vh 0;
       background: var(--off-white);
       overflow: hidden;
     }
-    .testimonial-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
-      margin-top: 4rem;
+    #testimonials .testimonials-header {
+      padding: 0 6vw;
+      margin-bottom: 4rem;
     }
-    @media (max-width: 900px) { .testimonial-grid { grid-template-columns: 1fr; } }
+
+    /* Marquee */
+    .testimonial-marquee-wrap {
+      overflow: hidden;
+      position: relative;
+    }
+    .testimonial-marquee-wrap::before,
+    .testimonial-marquee-wrap::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 120px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .testimonial-marquee-wrap::before {
+      left: 0;
+      background: linear-gradient(90deg, var(--off-white), transparent);
+    }
+    .testimonial-marquee-wrap::after {
+      right: 0;
+      background: linear-gradient(270deg, var(--off-white), transparent);
+    }
+    .testimonial-marquee {
+      display: flex;
+      gap: 2rem;
+      width: max-content;
+      animation: marquee-scroll 32s linear infinite;
+    }
+    .testimonial-marquee:hover { animation-play-state: paused; }
+    @keyframes marquee-scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
     .testimonial-card {
+      flex: 0 0 380px;
       background: var(--white);
       border: 1px solid rgba(200,197,190,.3);
       padding: 2.5rem;
       position: relative;
-    }
-    .testimonial-card::before {
+    }    .testimonial-card::before {
       content: '"';
       font-family: 'Cormorant Garamond', serif;
       font-size: 5rem;
@@ -728,7 +821,6 @@
       text-transform: uppercase;
       text-decoration: none;
       transition: background .35s, transform .35s;
-      cursor: none;
       align-self: flex-start;
     }
     .footer-btn:hover { background: var(--white); transform: translateY(-2px); }
@@ -814,10 +906,6 @@
 </head>
 <body>
 
-  <!-- CURSOR -->
-  <div id="cursor"></div>
-  <div id="cursor-follower"></div>
-
   <!-- SCROLL PROGRESS -->
   <div id="scroll-progress"></div>
 
@@ -832,15 +920,29 @@
     </div>
   </div>
 
+  <!-- MOBILE MENU -->
+  <div id="mobile-menu">
+    <a href="#features" class="mobile-nav-link">Your Ride</a>
+    <div class="mobile-menu-divider"></div>
+    <a href="#gallery" class="mobile-nav-link">Gallery</a>
+    <div class="mobile-menu-divider"></div>
+    <a href="#process" class="mobile-nav-link">Pricing</a>
+    <div class="mobile-menu-divider"></div>
+    <a href="#footer" class="mobile-nav-link">Contact</a>
+  </div>
+
   <!-- NAV -->
   <nav id="main-nav">
     <a href="#" class="nav-logo">Grand Arrival</a>
     <ul class="nav-links">
-      <li><a href="#features">Our Fleet</a></li>
+      <li><a href="#features">Your Ride</a></li>
       <li><a href="#gallery">Gallery</a></li>
-      <li><a href="#process">How It Works</a></li>
+      <li><a href="#process">Pricing</a></li>
       <li><a href="#footer">Contact</a></li>
     </ul>
+    <button id="burger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
   <!-- HERO -->
@@ -960,28 +1062,28 @@
 
     <div class="masonry-grid">
       <div class="masonry-item">
-        <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&q=80&fit=crop" alt="Wedding couple" loading="lazy" />
+        <img src="full-car.jpg" alt="Wedding couple" loading="lazy" />
       </div>
       <div class="masonry-item">
-        <img src="https://images.unsplash.com/photo-1543877087-ebf2fb7f4537?w=600&q=80&fit=crop" alt="Tesla wedding car" loading="lazy" />
+        <img src="bride8.jpg" alt="Tesla wedding car" loading="lazy" />
       </div>
       <div class="masonry-item" style="margin-top:2.5rem">
-        <img src="https://images.unsplash.com/photo-1509927083803-4bd519298ac4?w=600&q=80&fit=crop" alt="Wedding decoration" loading="lazy" />
+        <img src="bride2.jpg" alt="Wedding decoration" loading="lazy" />
       </div>
       <div class="masonry-item">
-        <img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=600&q=80&fit=crop" alt="Bride portrait" loading="lazy" />
+        <img src="bride4.jpg" alt="Bride portrait" loading="lazy" />
       </div>
       <div class="masonry-item" style="margin-top:1.8rem">
-        <img src="https://images.unsplash.com/photo-1530023367847-a683933f4172?w=600&q=80&fit=crop" alt="Wedding flowers" loading="lazy" />
+        <img src="bride5.jpg" alt="Wedding flowers" loading="lazy" />
       </div>
       <div class="masonry-item">
-        <img src="https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?w=600&q=80&fit=crop" alt="Couple joy" loading="lazy" />
+        <img src="bride.jpg" alt="Couple joy" loading="lazy" />
       </div>
       <div class="masonry-item" style="margin-top:3rem">
-        <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600&q=80&fit=crop" alt="Wedding rings" loading="lazy" />
+        <img src="captured.jpg" alt="Wedding rings" loading="lazy" />
       </div>
       <div class="masonry-item">
-        <img src="https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=600&q=80&fit=crop" alt="Ceremony aisle" loading="lazy" />
+        <img src="bride10.jpg" alt="Ceremony aisle" loading="lazy" />
       </div>
     </div>
   </section>
@@ -1000,58 +1102,97 @@
     </div>
   </section>
 
-  <!-- HOW IT WORKS -->
+  <!-- PRICING -->
   <section id="process">
     <div class="process-header">
-      <p class="section-eyebrow" style="color:var(--gold)">The Experience</p>
-      <h2 class="section-title">How it <em>works.</em></h2>
+      <p class="section-eyebrow" style="color:var(--gold)">Pricing</p>
+      <h2 class="section-title">One price,<br><em>everything included.</em></h2>
     </div>
-    <div class="process-steps">
-      <div class="step">
-        <div class="step-number">01</div>
-        <h3 class="step-title">Reach Out</h3>
-        <p class="step-desc">Message us on Facebook or send us a text. We'll get back to you within the hour.</p>
-        <div class="step-line"></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3rem;">
+      <!-- Price card -->
+      <div class="pricing-card">
+        <div style="position:absolute;top:-2rem;right:-2rem;width:200px;height:200px;border-radius:50%;border:1px solid rgba(255,255,255,.12);pointer-events:none;"></div>
+        <div style="position:absolute;top:-4rem;right:-4rem;width:260px;height:260px;border-radius:50%;border:1px solid rgba(255,255,255,.06);pointer-events:none;"></div>
+        <div>
+          <div style="font-family:'Jost',sans-serif;font-weight:400;font-size:.65rem;letter-spacing:.5em;text-transform:uppercase;color:var(--black);margin-bottom:1.2rem;">Grand Arrival Package</div>
+          <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:.9rem;">
+            <li style="font-family:'Jost',sans-serif;font-weight:300;font-size:.88rem;color:rgba(13,12,11,.8);display:flex;align-items:center;gap:.75rem;"><span style="color:var(--black);font-size:.7rem;">✦</span> Tesla Model 3 — Pristine White</li>
+            <li style="font-family:'Jost',sans-serif;font-weight:300;font-size:.88rem;color:rgba(13,12,11,.8);display:flex;align-items:center;gap:.75rem;"><span style="color:var(--black);font-size:.7rem;">✦</span> Premium ribbon &amp; floral hood décor</li>
+            <li style="font-family:'Jost',sans-serif;font-weight:300;font-size:.88rem;color:rgba(13,12,11,.8);display:flex;align-items:center;gap:.75rem;"><span style="color:var(--black);font-size:.7rem;">✦</span> Professional chauffeur</li>
+            <li style="font-family:'Jost',sans-serif;font-weight:300;font-size:.88rem;color:rgba(13,12,11,.8);display:flex;align-items:center;gap:.75rem;"><span style="color:var(--black);font-size:.7rem;">✦</span> Batangas City &amp; surrounding areas</li>
+            <li style="font-family:'Jost',sans-serif;font-weight:300;font-size:.88rem;color:rgba(13,12,11,.8);display:flex;align-items:center;gap:.75rem;"><span style="color:var(--black);font-size:.7rem;">✦</span> Free consultation &amp; coordination</li>
+          </ul>
+        </div>
+        <div class="pricing-price-col">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(3.5rem,7vw,5.5rem);font-weight:300;color:var(--black);line-height:1;">₱6,999</div>
+          <div style="font-family:'Jost',sans-serif;font-weight:200;font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:rgba(13,12,11,.45);margin-top:.5rem;">only</div>
+          <a href="https://m.me/grandarrivalbatangas" target="_blank" style="display:inline-block;margin-top:2rem;padding:.8rem 2rem;background:var(--black);color:var(--white);font-family:'Jost',sans-serif;font-weight:300;font-size:.68rem;letter-spacing:.35em;text-transform:uppercase;text-decoration:none;transition:background .3s;">Reserve Now</a>
+        </div>
       </div>
-      <div class="step">
-        <div class="step-number">02</div>
-        <h3 class="step-title">Choose Package</h3>
-        <p class="step-desc">Select from our tailored packages. All include ribbons, décor, and a professional chauffeur.</p>
-        <div class="step-line"></div>
-      </div>
-      <div class="step">
-        <div class="step-number">03</div>
-        <h3 class="step-title">Reserve Date</h3>
-        <p class="step-desc">Lock in your date with a minimal reservation fee. Your slot is exclusively yours.</p>
-        <div class="step-line"></div>
-      </div>
-      <div class="step">
-        <div class="step-number">04</div>
-        <h3 class="step-title">Grand Arrival</h3>
-        <p class="step-desc">We arrive early, impeccably prepared. You step in, and your forever begins.</p>
-      </div>
+      <p style="font-family:'Jost',sans-serif;font-weight:200;font-size:.72rem;color:var(--mid-gray);letter-spacing:.2em;text-align:center;">Limited slots per month · Message us to check your date</p>
     </div>
   </section>
 
   <!-- TESTIMONIALS -->
   <section id="testimonials">
-    <p class="section-eyebrow">Testimonials</p>
-    <h2 class="section-title">Words from<br><em>our couples.</em></h2>
-    <div class="testimonial-grid">
-      <div class="testimonial-card">
-        <div class="testimonial-stars">★★★★★</div>
-        <p class="testimonial-text">"The Tesla was immaculate — inside and out. Our guests couldn't stop taking photos. Grand Arrival made our entrance absolutely unforgettable."</p>
-        <span class="testimonial-author">— Camille &amp; James, Lipa City</span>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-stars">★★★★★</div>
-        <p class="testimonial-text">"Booking was so easy, and the car looked straight out of a magazine. The ribbons and décor were elegant. 100% worth every peso!"</p>
-        <span class="testimonial-author">— Andrea &amp; Marco, Batangas City</span>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-stars">★★★★★</div>
-        <p class="testimonial-text">"Professional, on time, and the car is stunning. When I stepped out in my gown with that Tesla behind me — it was everything I dreamed of."</p>
-        <span class="testimonial-author">— Sophia &amp; Nico, Tanauan</span>
+    <div class="testimonials-header">
+      <p class="section-eyebrow">Testimonials</p>
+      <h2 class="section-title">Words from<br><em>our couples.</em></h2>
+    </div>
+    <div class="testimonial-marquee-wrap">
+      <div class="testimonial-marquee">
+        <!-- Set 1 -->
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"The Tesla was immaculate — inside and out. Our guests couldn't stop taking photos. Grand Arrival made our entrance absolutely unforgettable."</p>
+          <span class="testimonial-author">— Camille &amp; James, Lipa City</span>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"Booking was so easy, and the car looked straight out of a magazine. The ribbons and décor were elegant. 100% worth every peso!"</p>
+          <span class="testimonial-author">— Andrea &amp; Marco, Batangas City</span>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"Professional, on time, and the car is stunning. When I stepped out in my gown with that Tesla behind me — it was everything I dreamed of."</p>
+          <span class="testimonial-author">— Sophia &amp; Nico, Tanauan</span>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"We were blown away by the service. The driver was so respectful and the car was spotless. Our family kept asking where we rented it!"</p>
+          <span class="testimonial-author">— Mae &amp; Renz, Nasugbu</span>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"The floral hood décor was breathtaking. Every photo with the Tesla looked like it was from a luxury wedding magazine. Highly recommended!"</p>
+          <span class="testimonial-author">— Tricia &amp; Aldrin, Sto. Tomas</span>
+        </div>
+        <!-- Set 2 — duplicate for seamless loop -->
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"The Tesla was immaculate — inside and out. Our guests couldn't stop taking photos. Grand Arrival made our entrance absolutely unforgettable."</p>
+          <span class="testimonial-author">— Camille &amp; James, Lipa City</span>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"Booking was so easy, and the car looked straight out of a magazine. The ribbons and décor were elegant. 100% worth every peso!"</p>
+          <span class="testimonial-author">— Andrea &amp; Marco, Batangas City</span>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"Professional, on time, and the car is stunning. When I stepped out in my gown with that Tesla behind me — it was everything I dreamed of."</p>
+          <span class="testimonial-author">— Sophia &amp; Nico, Tanauan</span>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"We were blown away by the service. The driver was so respectful and the car was spotless. Our family kept asking where we rented it!"</p>
+          <span class="testimonial-author">— Mae &amp; Renz, Nasugbu</span>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"The floral hood décor was breathtaking. Every photo with the Tesla looked like it was from a luxury wedding magazine. Highly recommended!"</p>
+          <span class="testimonial-author">— Tricia &amp; Aldrin, Sto. Tomas</span>
+        </div>
       </div>
     </div>
   </section>
@@ -1076,6 +1217,10 @@
           <a href="https://facebook.com/grandarrivalbatangas" target="_blank" class="contact-value">@grandarrivalbatangas</a>
         </div>
         <div class="contact-item">
+          <span class="contact-label">Instagram</span>
+          <a href="https://instagram.com/grandarrivalbatangas" target="_blank" class="contact-value">@grandarrivalbatangas</a>
+        </div>
+        <div class="contact-item">
           <span class="contact-label">Location</span>
           <span class="contact-value" style="font-size:1.1rem;">Batangas, Philippines</span>
         </div>
@@ -1084,30 +1229,46 @@
     </div>
     <div class="footer-bottom">
       <span class="footer-brand">Grand Arrival Bridal Car</span>
-      <span class="footer-copy">© 2025 Grand Arrival. All rights reserved. Batangas, PH.</span>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:.5rem;text-align:center;">
+        <span class="footer-copy">© 2025 Grand Arrival. All rights reserved. Batangas, PH.</span>
+        <span style="font-family:'Jost',sans-serif;font-weight:200;font-size:.6rem;letter-spacing:.2em;color:var(--mid-gray);opacity:.6;">Want a custom wedding website? Visit our partner <a href="https://kneel.studios" target="_blank" style="color:var(--gold);text-decoration:none;opacity:1;transition:opacity .3s;" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'">kneel.studios</a></span>
+      </div>
       <div class="footer-social">
-        <a href="https://facebook.com/grandarrivalbatangas" target="_blank">Facebook</a>
-        <a href="tel:+639989676468">Call Us</a>
+        <a href="https://facebook.com/grandarrivalbatangas" target="_blank" aria-label="Facebook" style="display:flex;align-items:center;gap:.5rem;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="opacity:.6;flex-shrink:0;"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Facebook
+        </a>
+        <a href="https://instagram.com/grandarrivalbatangas" target="_blank" aria-label="Instagram" style="display:flex;align-items:center;gap:.5rem;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="opacity:.6;flex-shrink:0;"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          Instagram
+        </a>
+        <a href="tel:+639989676468" style="display:flex;align-items:center;gap:.5rem;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="opacity:.6;flex-shrink:0;"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+          Call Us
+        </a>
       </div>
     </div>
   </footer>
 
 <script>
 (function () {
-  /* ── CURSOR ── */
-  const cursor = document.getElementById('cursor');
-  const follower = document.getElementById('cursor-follower');
-  let mx = 0, my = 0, fx = 0, fy = 0;
-  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-  (function animateCursor() {
-    cursor.style.left = mx + 'px';
-    cursor.style.top  = my + 'px';
-    fx += (mx - fx) * .12;
-    fy += (my - fy) * .12;
-    follower.style.left = fx + 'px';
-    follower.style.top  = fy + 'px';
-    requestAnimationFrame(animateCursor);
-  })();
+  /* ── BURGER MENU ── */
+  const burger = document.getElementById('burger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+
+  burger.addEventListener('click', () => {
+    burger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  });
+  mobileLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      burger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
 
   /* ── GSAP SETUP ── */
   gsap.registerPlugin(ScrollTrigger);
@@ -1210,10 +1371,12 @@
     scrollTrigger: { trigger: '.process-steps', start: 'top 80%' }
   });
 
+  
+
   /* ── TESTIMONIALS ── */
-  gsap.from('.testimonial-card', {
-    y: 50, opacity: 0, duration: .9, ease: 'power4.out', stagger: .18,
-    scrollTrigger: { trigger: '.testimonial-grid', start: 'top 80%' }
+  gsap.from('#testimonials .testimonials-header > *', {
+    y: 30, opacity: 0, duration: .9, ease: 'power4.out', stagger: .15,
+    scrollTrigger: { trigger: '#testimonials', start: 'top 80%' }
   });
 
   /* ── FOOTER CTA ── */
