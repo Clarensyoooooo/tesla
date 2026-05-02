@@ -560,12 +560,12 @@
       overflow: hidden;
     }
     #quote-bg {
-      position: absolute; inset: 0;
-      background-image: url('quote.jpg');
-      background-size: cover;
-      background-position: center 40%;
-      will-change: transform;
-    }
+  position: absolute; inset: 0;
+  background-image: url('quote.jpg');
+  background-size: cover;
+  background-position: center; /* Centered usually looks best for fixed backgrounds */
+  background-attachment: fixed; /* This is the magic CSS property */
+}
     .quote-overlay {
       position: absolute; inset: 0;
       background: rgba(13,12,11,.6);
@@ -1431,13 +1431,6 @@
     y: 70, opacity: 0, rotation: 3, duration: 1, ease: 'power4.out',
     stagger: { amount: .9, from: 'random' },
     scrollTrigger: { trigger: '.masonry-grid', start: 'top 80%' }
-  });
-
-  /* ── PARALLAX QUOTE BG ── */
-  gsap.to('#quote-bg', {
-    yPercent: 25,
-    ease: 'none',
-    scrollTrigger: { trigger: '#quote-section', start: 'top bottom', end: 'bottom top', scrub: true }
   });
 
   /* ── QUOTE TEXT ── */
