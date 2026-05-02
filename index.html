@@ -566,6 +566,13 @@
   background-position: center; /* Centered usually looks best for fixed backgrounds */
   background-attachment: fixed; /* This is the magic CSS property */
 }
+
+/* Turn off the fixed background on mobile devices */
+@media (max-width: 768px) {
+  #quote-bg {
+    background-attachment: scroll;
+  }
+}
     .quote-overlay {
       position: absolute; inset: 0;
       background: rgba(13,12,11,.6);
